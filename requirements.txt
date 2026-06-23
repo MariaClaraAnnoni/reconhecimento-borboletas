@@ -1,0 +1,91 @@
+# =========================
+# CORE NUMÉRICO (CRÍTICO)
+# =========================
+numpy>=1.24,<2.3
+scipy>=1.10,<1.17
+pandas>=2.0,<2.4
+
+# =========================
+# VISUALIZAÇÃO
+# =========================
+matplotlib>=3.7,<3.11
+seaborn>=0.13
+plotly
+
+# =========================
+# VISÃO COMPUTACIONAL
+# =========================
+opencv-contrib-python>=4.8,<4.14
+scikit-image>=0.21,<0.27
+pillow
+imageio
+
+# =========================
+# MACHINE LEARNING
+# =========================
+scikit-learn>=1.3,<1.8
+statsmodels
+shap
+lime
+
+# =========================
+# DEEP LEARNING (COMPATÍVEL)
+# =========================
+torch>=2.0,<2.10
+torchvision
+torchmetrics
+pytorch-lightning
+
+tensorflow>=2.13,<2.21
+keras>=3.0,<3.13
+
+# =========================
+# NLP
+# =========================
+transformers
+sentence-transformers
+datasets
+
+# =========================
+# ONNX (mantido com cautela)
+# =========================
+onnx>=1.14,<1.20
+onnxruntime
+onnxsim
+
+# =========================
+# MLOps / EXPERIMENTOS
+# =========================
+mlflow
+wandb
+
+# =========================
+# WEB / API
+# =========================
+fastapi
+uvicorn
+flask
+flask-cors
+
+# =========================
+# JUPYTER
+# =========================
+ipykernel
+notebook
+jupyterlab
+
+# =========================
+# UTILIDADES
+# =========================
+tqdm
+pyyaml
+requests
+rich
+sympy
+
+# =========================
+# OUTROS DO SEU AMBIENTE
+# =========================
+ultralytics
+rembg
+customtkinter
