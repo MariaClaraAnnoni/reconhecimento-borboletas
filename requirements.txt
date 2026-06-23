@@ -82,6 +82,7 @@ pyyaml
 requests
 rich
 sympy
+kaggle>=1.5,<2.0
 
 # =========================
 # OUTROS DO SEU AMBIENTE
