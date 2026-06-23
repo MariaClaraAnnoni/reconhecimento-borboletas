@@ -1,50 +1,92 @@
 # Reconhecimento de Borboletas 🦋
 
-Segmentação semântica e reconhecimento de padrões em imagens de borboletas utilizando Visão Computacional e Deep Learning.
+Segmentação e identificação automática de regiões de interesse em imagens de borboletas utilizando técnicas de Processamento Digital de Imagens e Inteligência Artificial.
 
 ## Visão Geral
 
-Este é um projeto de Machine Learning voltado para a extração de características e segmentação automática de borboletas em imagens complexas. O objetivo principal é treinar modelos capazes de gerar máscaras binárias precisas, separando o indivíduo do fundo da imagem (região de interesse), viabilizando o reconhecimento de padrões morfológicos.
+Este é um projeto desenvolvido para a disciplina de **Inteligência Artificial Aplicada à Análise de Imagens e Reconhecimento de Padrões**.
 
-Atualmente, o foco do projeto está no pré-processamento, treinamento e avaliação de modelos de segmentação semântica. Em versões futuras, o modelo treinado poderá ser integrado a uma aplicação visual interativa para inferência.
+O objetivo do projeto é implementar um pipeline completo de análise de imagens capaz de identificar automaticamente a região de interesse (ROI) correspondente à borboleta presente em uma imagem.
 
-O projeto foi desenvolvido como estudo prático e rigoroso em:
+Para isso, serão utilizadas técnicas clássicas de Processamento Digital de Imagens, incluindo pré-processamento, limiarização automática, segmentação, operações morfológicas e avaliação quantitativa dos resultados.
 
-* Computer Vision e Processamento Digital de Imagens
-* Semantic Segmentation
-* Extração de características e limiarização
-* Organização de pipelines reproduzíveis de Machine Learning
+Ao final, o sistema deverá ser capaz de:
+
+* Carregar imagens do dataset;
+* Realizar pré-processamento;
+* Segmentar automaticamente a borboleta;
+* Gerar máscaras binárias da região de interesse;
+* Sobrepor a segmentação à imagem original;
+* Avaliar a qualidade da segmentação utilizando métricas apropriadas;
+* Exibir os resultados por meio de uma interface gráfica.
+
+O projeto foi desenvolvido como oportunidade prática de estudo em:
+
+* Processamento Digital de Imagens
+* Inteligência Artificial
+* Reconhecimento de Padrões
+* Segmentação de Imagens
+* Extração de Região de Interesse (ROI)
+* Avaliação de Algoritmos de Visão Computacional
 
 ## Dataset
 
-O dataset utilizado para o treinamento e validação das máscaras é:
+O dataset utilizado é:
 
 * Butterfly Dataset
 * Fonte: Kaggle
-* Contém imagens RGB de borboletas e suas respectivas máscaras binárias (*ground truth*)
+* Imagens de diferentes espécies de borboletas em ambientes naturais
 
 Dataset:
+
 https://www.kaggle.com/datasets/veeralakrishna/butterfly-dataset
+
+O dataset será utilizado para experimentação e validação das técnicas de segmentação implementadas ao longo do projeto.
 
 ## Estrutura do Projeto
 
 ```text
-reconhecimento-borboleta/
+ButterflyROI/
 │
 ├── data/
+│   ├── raw/
+│   ├── processed/
 │   └── butterfly_dataset/
 │
 ├── notebooks/
+│   ├── dataset_analysis.ipynb
+│   ├── preprocessing.ipynb
+│   └── segmentation.ipynb
 │
 ├── src/
-│   ├── train.py
-│   ├── predict.py
-│   ├── evaluate.py
+│   ├── preprocessing/
+│   │   ├── filters.py
+│   │   └── enhancement.py
+│   │
+│   ├── segmentation/
+│   │   ├── otsu.py
+│   │   ├── morphology.py
+│   │   └── roi_extraction.py
+│   │
+│   ├── evaluation/
+│   │   ├── metrics.py
+│   │   ├── iou.py
+│   │   └── dice.py
+│   │
+│   ├── visualization/
+│   │   ├── overlay.py
+│   │   └── plots.py
+│   │
 │   └── utils.py
 │
-├── models/
+├── outputs/
+│   ├── masks/
+│   ├── overlays/
+│   ├── reports/
+│   └── figures/
 │
-├── runs/
+├── interface/
+│   └── app.py
 │
 ├── download_dataset.py
 ├── requirements.txt
@@ -57,8 +99,8 @@ reconhecimento-borboleta/
 Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/reconhecimento-borboleta.git
-cd reconhecimento-borboleta
+git clone https://github.com/seu-usuario/ButterflyROI.git
+cd ButterflyROI
 ```
 
 Crie um ambiente virtual:
@@ -89,7 +131,7 @@ pip install -r requirements.txt
 
 ## Configuração do Kaggle
 
-O projeto utiliza a CLI oficial do Kaggle para baixar automaticamente o dataset.
+O projeto utiliza a CLI oficial do Kaggle para realizar o download automático do dataset.
 
 Após instalar as dependências, execute:
 
@@ -103,8 +145,6 @@ Um link será exibido no terminal.
 2. Faça login na sua conta Kaggle;
 3. Autorize o acesso;
 4. Retorne ao terminal.
-
-As credenciais serão armazenadas automaticamente e não será necessário repetir esse processo.
 
 Para verificar se a autenticação foi realizada corretamente:
 
@@ -120,11 +160,12 @@ Após autenticar sua conta:
 python download_dataset.py
 ```
 
-O script irá:
+O script será responsável por:
 
 * Verificar se o dataset já existe localmente;
-* Fazer o download apenas quando necessário;
-* Organizar automaticamente os arquivos do projeto.
+* Realizar o download automaticamente quando necessário;
+* Extrair os arquivos;
+* Organizar os dados na estrutura do projeto.
 
 Os dados serão armazenados em:
 
@@ -132,81 +173,127 @@ Os dados serão armazenados em:
 data/butterfly_dataset/
 ```
 
-## Treinamento
+## Metodologia
 
-Exemplo de treinamento:
+### 1. Pré-processamento
 
-```bash
-python src/train.py
-```
+As imagens poderão passar pelas seguintes etapas:
 
-Durante o treinamento serão gerados:
+* Conversão para escala de cinza;
+* Redução de ruído;
+* Suavização com filtros Gaussianos;
+* Equalização de histograma;
+* Ajustes de contraste.
 
-* Pesos do modelo
-* Métricas de validação
-* Curvas de aprendizado
-* Matrizes de confusão
-* Relatórios de desempenho
+### 2. Segmentação
 
-Os resultados serão salvos em:
+A segmentação inicial será realizada utilizando técnicas clássicas de limiarização.
 
-```text
-runs/
-```
+#### Método de Otsu
 
-## Inferência
+O algoritmo de Otsu determina automaticamente um limiar capaz de separar objeto e fundo.
 
-Para classificar novas imagens:
-
-```bash
-python src/predict.py
-```
-
-Os resultados serão salvos no diretório:
+Fluxo esperado:
 
 ```text
-runs/
+Imagem RGB
+      ↓
+Escala de Cinza
+      ↓
+Gaussian Blur
+      ↓
+Threshold Otsu
+      ↓
+Máscara Binária
 ```
 
-## Objetivos
+### 3. Pós-processamento
 
-### Fase Atual
+Após a segmentação poderão ser aplicadas operações morfológicas como:
 
-* Classificar espécies de borboletas automaticamente;
-* Explorar arquiteturas modernas de Deep Learning;
-* Avaliar métricas de desempenho em classificação multiclasse;
-* Desenvolver um pipeline reproduzível para classificação de imagens;
-* Comparar diferentes modelos e hiperparâmetros.
+* Erosão;
+* Dilatação;
+* Opening;
+* Closing.
 
-### Fase Futura
+Objetivos:
 
-* Desenvolver uma aplicação web para classificação em tempo real;
-* Permitir upload de imagens pelo usuário;
-* Exibir a espécie identificada e sua probabilidade;
-* Disponibilizar o modelo treinado online;
-* Criar uma interface amigável para demonstração dos resultados.
+* Remover ruídos;
+* Corrigir falhas na segmentação;
+* Melhorar os contornos da região de interesse.
+
+### 4. Extração da Região de Interesse
+
+A região segmentada será aplicada à imagem original para destacar apenas a borboleta.
+
+Resultado esperado:
+
+* Imagem Original;
+* Máscara Binária;
+* Sobreposição da Máscara (Overlay).
+
+### 5. Avaliação
+
+A qualidade da segmentação será analisada utilizando métricas quantitativas.
+
+Métricas previstas:
+
+* Intersection over Union (IoU);
+* Dice Score;
+* Precisão da segmentação;
+* Comparação visual dos resultados.
+
+## Execução
+
+Executar o pipeline de segmentação:
+
+```bash
+python src/segmentation/otsu.py
+```
+
+Os resultados gerados serão armazenados em:
+
+```text
+outputs/
+```
+
+## Interface
+
+A versão final do projeto contará com uma interface gráfica para visualização dos resultados.
+
+A interface deverá exibir:
+
+```text
+┌─────────────┬─────────────┬─────────────┐
+│  Original   │  Máscara    │   Overlay   │
+└─────────────┴─────────────┴─────────────┘
+```
+
+Permitindo ao usuário comparar visualmente:
+
+* Imagem original;
+* Resultado da segmentação;
+* Região de interesse destacada.
 
 ## Tecnologias Utilizadas
 
 * Python
-* TensorFlow / Keras
-* PyTorch
 * OpenCV
 * NumPy
-* Pandas
 * Matplotlib
+* Scikit-image
 * Scikit-learn
+* Pandas
 * Kaggle CLI
 
 ## Resultados Esperados
 
-* Alta precisão na identificação das espécies de borboletas;
-* Pipeline automatizado de treinamento e inferência;
-* Comparação entre diferentes arquiteturas de classificação;
-* Base para futuros projetos de visão computacional aplicados à biodiversidade;
-* Integração futura com aplicações web.
+* Segmentação eficiente das regiões de interesse;
+* Extração automática das borboletas presentes nas imagens;
+* Avaliação quantitativa dos métodos utilizados;
+* Visualização clara dos resultados obtidos;
+* Aplicação prática de conceitos de Inteligência Artificial e Processamento Digital de Imagens.
 
 ## Licença
 
-Este projeto é destinado a fins educacionais, como parte das exigências da disciplina de Inteligência Artificial Aplicada à Análise de Imagens e Reconhecimento de Padrões da Universidade Federal de Lavras.
-
+Este projeto possui finalidade exclusivamente acadêmica e educacional, sendo desenvolvido para a disciplina de Inteligência Artificial Aplicada à Análise de Imagens e Reconhecimento de Padrões.
