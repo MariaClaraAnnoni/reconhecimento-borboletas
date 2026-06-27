@@ -44,7 +44,7 @@ def main():
     zip_file.unlink()
 
     # Renomeia a pasta extraída
-    original_folder = DATA_DIR / "SpongeBob Object Detection"
+    original_folder = DATA_DIR / "SpongeBob Object Detection Dataset"
 
     if original_folder.exists():
         shutil.move(str(original_folder), str(FINAL_DIR))
